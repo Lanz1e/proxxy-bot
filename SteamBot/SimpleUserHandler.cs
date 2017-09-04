@@ -61,7 +61,7 @@ namespace SteamBot
         public override void OnLoginCompleted()
         {
             Bot.SteamFriends.SendChatMessage(76561198070151287, EChatEntryType.ChatMsg,
-                "PROXXY CHAMANDO BULLET.. PROXXY CHAMANDO BULLET, TESTANDO.. TESTANDO.. 1,2,3!");
+                "PROXXY CHAMANDO LANZ1E.. PROXXY CHAMANDO LANZ1E, TESTANDO.. TESTANDO.. 1,2,3!");
         }
 
         public override void OnChatRoomMessage(SteamID chatID, SteamID sender, string message)
@@ -76,8 +76,10 @@ namespace SteamBot
         {
             message = message.ToLower();
             message = removerAcentos(message);
+            //log de msgs
             Console.WriteLine(DateTime.Now.ToShortTimeString().ToString()+"-"+Bot.SteamFriends.GetFriendPersonaName(OtherSID)+": "+message);
-            if (IsNumeric(message))//numero
+
+            if (IsNumeric(message))//brincadeira com numeros
             {
                 Random rnd = new Random();
                 Double a = Double.Parse(message);
@@ -85,7 +87,7 @@ namespace SteamBot
                 Double res=0.0;
                 string mResp="";   
                       
-                int op = rnd.Next(1, 5);
+                int op = rnd.Next(1, 6);
                 switch (op)
                 {
                     case 1://adi
@@ -103,16 +105,22 @@ namespace SteamBot
                         Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
                         break;
                     case 3://mul
-                        b = rnd.Next(1, 1000);
+                        b = rnd.Next(1, 9999);
                         res = a * b;
                         mResp = a + " * " + b + " é " + res.ToString();
                         SendChatMessage(mResp);
                         Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
                         break;
                     case 4://div
-                        b = rnd.Next(1, 10);
+                        b = rnd.Next(1, 9999);
                         res = a / b;
                         mResp = a + " / " + b + " é " + res.ToString();
+                        SendChatMessage(mResp);
+                        Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
+                        break;
+                    case 5://bin
+                        int x= (int)Math.Round(a, MidpointRounding.AwayFromZero);
+                        mResp = a + " em binário é " + Convert.ToString(x, 2);
                         SendChatMessage(mResp);
                         Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
                         break;
@@ -128,7 +136,7 @@ namespace SteamBot
                 SendChatMessage(l.ToString());
                 Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + l);
             }
-            else {
+            else {//resp com ia
                 Request r = new Request(message, myUser, AimlBot);
                 Result res = AimlBot.Chat(r);
                 SendChatMessage(res.Output);
