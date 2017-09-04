@@ -30,6 +30,14 @@ namespace SteamBot
             AimlBot.isAcceptingUserInput = true;
         }
 
+        public static bool IsNumeric(object Expression)
+        {
+            double retNum;
+
+            bool isNum = Double.TryParse(Convert.ToString(Expression), System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out retNum);
+            return isNum;
+        }
+
         public static string removerAcentos(string texto)
         {
             string comAcentos = "ÄÅÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛüúûùÇç";
@@ -69,7 +77,48 @@ namespace SteamBot
             message = message.ToLower();
             message = removerAcentos(message);
             Console.WriteLine(DateTime.Now.ToShortTimeString().ToString()+"-"+Bot.SteamFriends.GetFriendPersonaName(OtherSID)+": "+message);
-            if (message.Length == 1 && !(Regex.IsMatch(message, @"^\d+$")))
+            if (IsNumeric(message))//numero
+            {
+                Random rnd = new Random();
+                Double a = Double.Parse(message);
+                Double b = 0.0;
+                Double res=0.0;
+                string mResp="";   
+                      
+                int op = rnd.Next(1, 5);
+                switch (op)
+                {
+                    case 1://adi
+                        b = rnd.Next(1, 9999);
+                        res =  a + b;
+                        mResp = a + " + " + b + " é " + res.ToString();
+                        SendChatMessage(mResp);
+                        Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
+                        break;
+                    case 2://sub
+                        b = rnd.Next(1, 9999);
+                        res = a - b;
+                        mResp = a + " - " + b + " é " + res.ToString();
+                        SendChatMessage(mResp);
+                        Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
+                        break;
+                    case 3://mul
+                        b = rnd.Next(1, 1000);
+                        res = a * b;
+                        mResp = a + " * " + b + " é " + res.ToString();
+                        SendChatMessage(mResp);
+                        Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
+                        break;
+                    case 4://div
+                        b = rnd.Next(1, 10);
+                        res = a / b;
+                        mResp = a + " / " + b + " é " + res.ToString();
+                        SendChatMessage(mResp);
+                        Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
+                        break;
+                }
+            }
+            else if (message.Length == 1 && !(Regex.IsMatch(message, @"^\d+$")))//letra
             {
                 char l = Char.Parse(message);
                 if (l == 'z')
@@ -85,63 +134,6 @@ namespace SteamBot
                 SendChatMessage(res.Output);
                 Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + res.Output);
             }
-                
-            /*message=message.ToLower();
-            desconhece = true;
-            if (new string[] { "caralho", "porra", "pqp", "fdp", "vai tomar no cu", "puta", "vsf", "carai", "desgraçada" }.Any(s => message.Contains(s))) {
-                string[] padrao = { "você usa esse linguajar com uma menina ?", "não seja rude pls", "e a educação ?", "vou lavar seu teclado com sabão", "meça seus palavrões" };
-                SendChatMessage(padrao[r.Next(0, padrao.Length)]);
-                desconhece = false;
-            }
-            //se a pessoa envia uma letra, ela retorna a proxima letra do alfabeto
-            else if (message.Length==1 && !(Regex.IsMatch(message, @"^\d+$"))) {
-                char l = Char.Parse(message);
-                if (l=='z')
-                    l='a';
-                else
-                    l++;
-                SendChatMessage(l.ToString());
-                desconhece = false;
-            }
-            else {
-                if (new string[] { "oi", "eai", "ola", "eae", "proxxy", "proxxybot" }.Any(s => message.Equals(s))) {
-                    string[] padrao = { "oi", "olá", "opa, eai!", "eai", "eae", "oi "+ Bot.SteamFriends.GetFriendPersonaName(OtherSID)+" ^-^" };
-                    if(IsAdmin)
-                        SendChatMessage("MESSSSSTREEEEEEEEEEEEEEEE");
-                    else
-                        SendChatMessage(padrao[r.Next(0, padrao.Length)]);
-                    SendChatMessage("td bem ?");
-                    desconhece = false;
-                }
-                if (message.Contains("sim e vc") || message.Contains("s e vc")) {
-                    SendChatMessage("to avonts haha");
-                    desconhece = false;
-                }
-                if (new string[] { "haha", "kkk", "lol" }.Any(s => message.Contains(s)))
-                {
-                    string[] padrao = { "kkkkk","haha","lul","ASIUDGASHDASDFASDA"};
-                    SendChatMessage(padrao[r.Next(0, padrao.Length)]);
-                    desconhece = false;
-                }
-                if (message.Equals("sim") || message.Equals("s")) {
-                    SendChatMessage("legal");
-                    desconhece = false;
-                }
-                if (new string[] { "foi mal", "malz", "desculpa" }.Any(s => message.Contains(s))) {
-                    SendChatMessage("rlx kk");
-                    desconhece = false;
-                }
-                if (new string[] { "xau", "flw", "tchau" }.Any(s => message.Contains(s))) {
-                    string[] padrao = { "Até logo, até mais ver, bon voyage, arrivederci, até mais, adeus, boa viagem, vá em paz, que a porta bata onde o sol não bate, hasta la vista, não volte mais aqui, escafeda-se, e saia logo daqui.", "tchau!", "até mais!", "flwwwwwwww <3", "hasta luego." };
-                    SendChatMessage(padrao[r.Next(0, padrao.Length)]);
-                    desconhece = false;
-                }
-            }
-            if (desconhece){
-                string[] padrao = { "hã?","o Bullet não me ensinou sobre isso ._.","o que \""+message+"\" significa?", Bot.ChatResponse };
-                SendChatMessage(padrao[r.Next(0, padrao.Length)]);
-            }*/
-
         }
 
         public override bool OnTradeRequest() 
