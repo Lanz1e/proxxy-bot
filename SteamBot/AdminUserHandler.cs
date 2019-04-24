@@ -71,6 +71,7 @@ namespace SteamBot
         /// </summary>
         public override void OnMessage(string message, EChatEntryType type)
         {
+            // TODO: magic command system
         }
 
         /// <summary>
@@ -83,6 +84,7 @@ namespace SteamBot
         {
             if (IsAdmin)
                 return true;
+
             return false;
         }
 
@@ -98,7 +100,7 @@ namespace SteamBot
 
         public override void OnTradeInit()
         {
-            SendTradeMessage("sucesso! (Type {0} for commands)", HelpCmd);
+            SendTradeMessage("Success. (Type {0} for commands)", HelpCmd);
         }
 
         public override void OnTradeAddItem(Schema.Item schemaItem, Inventory.Item inventoryItem)
@@ -120,7 +122,7 @@ namespace SteamBot
         {
             if (!IsAdmin)
             {
-                SendTradeMessage("você não é meu mestre.");
+                SendTradeMessage("You are not my master.");
                 Trade.SetReady(false);
                 return;
             }
@@ -173,12 +175,12 @@ namespace SteamBot
             if (message.StartsWith(AddCmd))
             {
                 HandleAddCommand(message);
-                SendTradeMessage("adicionado.");
+                SendTradeMessage("done adding.");
             }
             else if (message.StartsWith(RemoveCmd))
             {
                 HandleRemoveCommand(message);
-                SendTradeMessage("removido.");
+                SendTradeMessage("done removing.");
             }
         }
 

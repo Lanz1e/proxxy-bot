@@ -19,7 +19,8 @@ namespace SteamBot
         User myUser;
 
 
-        public SimpleUserHandler (Bot bot, SteamID sid) : base(bot, sid) {
+        public SimpleUserHandler(Bot bot, SteamID sid) : base(bot, sid)
+        {
 
             //INICIAR IA DA PROXXY
             AimlBot = new AIMLbot.Bot();
@@ -53,15 +54,15 @@ namespace SteamBot
             return false;
         }
 
-        public override bool OnFriendAdd () 
+        public override bool OnFriendAdd()
         {
             return true;
         }
 
         public override void OnLoginCompleted()
         {
-            Bot.SteamFriends.SendChatMessage(76561198070151287, EChatEntryType.ChatMsg,
-                "PROXXY CHAMANDO LANZ1E.. PROXXY CHAMANDO LANZ1E, TESTANDO.. TESTANDO.. 1,2,3!");
+            //Bot.SteamFriends.SendChatMessage(76561198070151287, EChatEntryType.ChatMsg,
+                //"PROXXY CHAMANDO LANZ1E.. PROXXY CHAMANDO LANZ1E, TESTANDO.. TESTANDO.. 1,2,3!");
         }
 
         public override void OnChatRoomMessage(SteamID chatID, SteamID sender, string message)
@@ -70,29 +71,29 @@ namespace SteamBot
             base.OnChatRoomMessage(chatID, sender, message);
         }
 
-        public override void OnFriendRemove () {}
-        
-        public override void OnMessage (string message, EChatEntryType type) 
+        public override void OnFriendRemove() { }
+
+        public override void OnMessage(string message, EChatEntryType type)
         {
             message = message.ToLower();
             message = removerAcentos(message);
             //log de msgs
-            Console.WriteLine(DateTime.Now.ToShortTimeString().ToString()+"-"+Bot.SteamFriends.GetFriendPersonaName(OtherSID)+": "+message);
+            Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.SteamFriends.GetFriendPersonaName(OtherSID) + ": " + message);
 
             if (IsNumeric(message))//brincadeira com numeros
             {
                 Random rnd = new Random();
                 Double a = Double.Parse(message);
                 Double b = 0.0;
-                Double res=0.0;
-                string mResp="";   
-                      
+                Double res = 0.0;
+                string mResp = "";
+
                 int op = rnd.Next(1, 6);
                 switch (op)
                 {
                     case 1://adi
                         b = rnd.Next(1, 9999);
-                        res =  a + b;
+                        res = a + b;
                         mResp = a + " + " + b + " é " + res.ToString();
                         SendChatMessage(mResp);
                         Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
@@ -119,7 +120,7 @@ namespace SteamBot
                         Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
                         break;
                     case 5://bin
-                        int x= (int)Math.Round(a, MidpointRounding.AwayFromZero);
+                        int x = (int)Math.Round(a, MidpointRounding.AwayFromZero);
                         mResp = a + " em binário é " + Convert.ToString(x, 2);
                         SendChatMessage(mResp);
                         Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + mResp);
@@ -136,7 +137,8 @@ namespace SteamBot
                 SendChatMessage(l.ToString());
                 Console.WriteLine(DateTime.Now.ToShortTimeString().ToString() + "-" + Bot.DisplayName + ": " + l);
             }
-            else {//resp com ia
+            else
+            {//resp com ia
                 Request r = new Request(message, myUser, AimlBot);
                 Result res = AimlBot.Chat(r);
                 SendChatMessage(res.Output);
@@ -144,7 +146,7 @@ namespace SteamBot
             }
         }
 
-        public override bool OnTradeRequest() 
+        public override bool OnTradeRequest()
         {
             if (IsAdmin)
             {
@@ -157,41 +159,41 @@ namespace SteamBot
                 "desculpa, mas por enquanto só posso aceitar trocas do meu mestre");*/
             return false;
         }
-        
-        public override void OnTradeError (string error) 
+
+        public override void OnTradeError(string error)
         {
             SendChatMessage("oh, ocorreu um erro: {0}.", error);
-            Log.Warn (error);
+            Log.Warn(error);
         }
-        
-        public override void OnTradeTimeout () 
+
+        public override void OnTradeTimeout()
         {
             SendChatMessage("desculpa, mas você estava AFK e a troca foi cancelada.");
-            Log.Info ("User was kicked because he was AFK.");
+            Log.Info("User was kicked because he was AFK.");
         }
-        
-        public override void OnTradeInit() 
+
+        public override void OnTradeInit()
         {
             SendTradeMessage("o que você quer trocar ?");
         }
-        
-        public override void OnTradeAddItem (Schema.Item schemaItem, Inventory.Item inventoryItem) {}
-        
-        public override void OnTradeRemoveItem (Schema.Item schemaItem, Inventory.Item inventoryItem) {}
-        
-        public override void OnTradeMessage (string message) {}
-        
-        public override void OnTradeReady (bool ready) 
+
+        public override void OnTradeAddItem(Schema.Item schemaItem, Inventory.Item inventoryItem) { }
+
+        public override void OnTradeRemoveItem(Schema.Item schemaItem, Inventory.Item inventoryItem) { }
+
+        public override void OnTradeMessage(string message) { }
+
+        public override void OnTradeReady(bool ready)
         {
             if (!ready)
             {
-                Trade.SetReady (false);
+                Trade.SetReady(false);
             }
             else
             {
-                if(Validate ())
+                if (Validate())
                 {
-                    Trade.SetReady (true);
+                    Trade.SetReady(true);
                 }
                 SendTradeMessage("Scrap: {0}", AmountAdded.ScrapTotal);
             }
@@ -208,7 +210,7 @@ namespace SteamBot
             switch (offer.OfferState)
             {
                 case TradeOfferState.TradeOfferStateAccepted:
-                    Log.Info($"Trade offer {offer.TradeOfferId} has been completed!");
+                    //Log.Info($"Trade offer {offer.TradeOfferId} has been completed!");
                     SendChatMessage("troca completa, valeuuu <3!");
                     break;
                 case TradeOfferState.TradeOfferStateActive:
@@ -217,36 +219,38 @@ namespace SteamBot
                     //Trade is still active but incomplete
                     break;
                 case TradeOfferState.TradeOfferStateCountered:
-                    Log.Info($"Trade offer {offer.TradeOfferId} was countered");
+                    //.Info($"Trade offer {offer.TradeOfferId} was countered");
                     break;
                 default:
-                    Log.Info($"Trade offer {offer.TradeOfferId} failed");
+                    //Log.Info($"Trade offer {offer.TradeOfferId} failed");
                     break;
             }
         }
 
-        public override void OnTradeAccept() 
+        public override void OnTradeAccept()
         {
             if (Validate() || IsAdmin)
             {
                 //Even if it is successful, AcceptTrade can fail on
                 //trades with a lot of items so we use a try-catch
-                try {
+                try
+                {
                     if (Trade.AcceptTrade())
                         Log.Success("Trade Accepted!");
                 }
-                catch {
-                    Log.Warn ("The trade might have failed, but we can't be sure.");
+                catch
+                {
+                    Log.Warn("The trade might have failed, but we can't be sure.");
                 }
             }
         }
 
-        public bool Validate ()
-        {            
+        public bool Validate()
+        {
             AmountAdded = TF2Value.Zero;
-            
-            List<string> errors = new List<string> ();
-            
+
+            List<string> errors = new List<string>();
+
             foreach (TradeUserAssets asset in Trade.OtherOfferedItems)
             {
                 var item = Trade.OtherInventory.GetItem(asset.assetid);
@@ -258,16 +262,16 @@ namespace SteamBot
                     AmountAdded += TF2Value.Refined;
                 else
                 {
-                    var schemaItem = Trade.CurrentSchema.GetItem (item.Defindex);
-                    errors.Add ("Item " + schemaItem.Name + " is not a metal.");
+                    var schemaItem = Trade.CurrentSchema.GetItem(item.Defindex);
+                    errors.Add("Item " + schemaItem.Name + " is not a metal.");
                 }
             }
-            
+
             if (AmountAdded == TF2Value.Zero)
             {
-                errors.Add ("você deve pelo menos colocar um Scrap.");
+                errors.Add("você deve pelo menos colocar um Scrap.");
             }
-            
+
             // send the errors
             if (errors.Count != 0)
                 SendTradeMessage("houve erros com sua troca: ");
@@ -275,11 +279,11 @@ namespace SteamBot
             {
                 SendTradeMessage(error);
             }
-            
+
             return errors.Count == 0;
         }
-        
+
     }
- 
+
 }
 

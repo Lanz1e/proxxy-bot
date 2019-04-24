@@ -353,7 +353,7 @@ namespace SteamTrade
             {
                 try
                 {
-                    trade.SendMessage("você ta aí ? A troca vai ser cancelada em " + untilActionTimeout + " segundos se você não fizer nada.");
+                    trade.SendMessage("Are You AFK? The trade will be canceled in " + untilActionTimeout + " seconds if you don't do something.");
                 }
                 catch { }
                 lastTimeoutMessage = now;

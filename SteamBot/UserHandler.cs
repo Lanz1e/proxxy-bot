@@ -189,22 +189,7 @@ namespace SteamBot
         /// <param name="command">The command message.</param>
         public virtual void OnBotCommand(string command)
         {
-            switch (command) {
-                case "del":
-                    var sid = new SteamID();
-                    Console.WriteLine("Steam ID3 para remover: ");
-                    bool success = sid.SetFromSteam3String("["+Console.ReadLine()+"]");
-                    if (success){
-                        Bot.SteamFriends.RemoveFriend(sid);
-                        Console.WriteLine("Usuário removido com sucesso!");
-                    }
-                    else
-                        Console.WriteLine("ID3 inválido!");
-                    break;
-                default:
-                    Console.WriteLine("Comando desconhecido");
-                    break;
-            }
+
         }
 
         /// <summary>
